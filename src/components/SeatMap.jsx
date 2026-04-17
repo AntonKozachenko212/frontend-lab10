@@ -1,19 +1,28 @@
 import React from 'react';
+import { useParams } from 'react-router-dom';
 import { useBooking } from '../context/BookingContext';
+import { BookingService } from '../services/BookingService';
 
 export const SeatMap = ({ wagonsData }) => {
+  const { trainId } = useParams();
   const { selectedWagon, selectedSeats, toggleSeat } = useBooking();
   const seats = wagonsData[selectedWagon] || [];
+
+  const allBookings = BookingService.getBookings();
+
+  const bookedSeatsIds = allBookings
+    .filter(b => b.trainId === parseInt(trainId) && b.wagonNumber === selectedWagon + 1)
+    .flatMap(b => b.seats);
 
   return (
     <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
       <h3 className="text-lg font-bold mb-4 text-slate-800">Схема вагона №{selectedWagon + 1}</h3>
       
-      {/* Сітка місць */}
       <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-10 gap-3">
         {seats.map((seat) => {
           const isSelected = selectedSeats.includes(seat.id);
-          const isBooked = seat.status === 'booked';
+          
+          const isBooked = bookedSeatsIds.includes(seat.id) || seat.status === 'booked';
 
           return (
             <button

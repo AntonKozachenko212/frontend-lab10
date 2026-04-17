@@ -1,5 +1,5 @@
-// src/components/TrainCard.jsx
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 export const TrainCard = ({ train }) => {
   const departureDate = new Date(train.departure).toLocaleString('uk-UA', {
@@ -34,10 +34,12 @@ export const TrainCard = ({ train }) => {
           <p className="font-semibold text-slate-900">{departureDate}</p>
         </div>
       </div>
-
-      <button className="w-full bg-slate-900 hover:bg-blue-600 text-white font-medium py-3 px-4 rounded-xl transition-colors duration-200 focus:outline-none focus:ring-4 focus:ring-blue-500/30">
+      <Link 
+        to={`/booking/${train.id}`} 
+        className="w-full block text-center bg-slate-900 hover:bg-blue-600 text-white font-medium py-3 px-4 rounded-xl transition-colors duration-200 focus:outline-none focus:ring-4 focus:ring-blue-500/30"
+      >
         Вибрати місця
-      </button>
+      </Link>
     </div>
   );
 };
